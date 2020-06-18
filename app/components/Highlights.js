@@ -5,6 +5,14 @@ import {getArticles} from '../utils/WebServices';
 const {width, height} = Dimensions.get('window');
 
 function Headline(props){
+    //handle the case where author has the format <a href="...
+    var author = props.author;
+    if (props.author != null && props.author.search(" href") != -1){
+        const s = props.author.indexOf('>');
+        const e = props.author.lastIndexOf('<');
+        author = props.author.substring(s+1,e);
+    }
+    
     return (
         <View style={styles.headline}>
             <Image 
@@ -13,8 +21,8 @@ function Headline(props){
             />
             <View style={{padding: 15}}>
                 <Text style={styles.headlineTitle}>{props.title}</Text>
-                <Text>{props.author}</Text>
-                <Text>{props.date}</Text>
+                <Text>{props.author == null ? "غير معروف" : author}</Text>
+                <Text>{new Date(props.date).toLocaleString('en-US')}</Text>
             </View>
         </View>
     )
@@ -31,8 +39,8 @@ export default class Highlights extends React.Component {
 
     componentDidMount(){
         getArticles()
-        .then(res => {
-            this.setState({isLoading: false, articles: res.articles})
+        .then(articles => {
+            this.setState({isLoading: false, articles: articles})            
         })
         .catch(err => console.log(err));
     }
