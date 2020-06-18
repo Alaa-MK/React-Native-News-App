@@ -21,7 +21,7 @@ export default class Highlights extends React.Component {
     }
 
     render() {
-        const headlines = this.state.articles.map(art => <Headline detailed={false} article={art}/>)
+        const headlines = this.state.articles.map(art => <Headline navigation={this.props.navigation} detailed={false} article={art}/>)
         return (
             this.state.isLoading ? 
             <View style={{justifyContent: 'center', height: '100%'}}>
