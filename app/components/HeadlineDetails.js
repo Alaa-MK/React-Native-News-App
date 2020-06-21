@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, Dimensions, Linking } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 const {width, height} = Dimensions.get ('window');
 
 export function fixAuthor (originalAuthor) {
@@ -25,6 +26,11 @@ export default function HeadlineDetails (props){
                 <Text>{author}</Text>
                 <Text>{new Date(params.publishedAt).toLocaleString('en-US')}</Text>
                 <Text style={styles.headlineContent}>{params.content}</Text>
+                <TouchableOpacity 
+                style={styles.button}
+                onPress={() => Linking.openURL(params.url)}>
+                    <Text style={styles.buttonText}>Open URL</Text>
+                </TouchableOpacity>
             </View>
         </ScrollView>
     );
@@ -48,5 +54,19 @@ export const styles = StyleSheet.create ({
   },
   headlineContent: {
       fontSize: 14
+  },
+  button:{
+    backgroundColor: 'green',
+    alignItems: 'center',
+    width: width * 0.5,
+    alignSelf: "center",
+    paddingVertical: 10,
+    borderRadius: 20,
+    marginTop: 40
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: 'white', 
   }
 });
