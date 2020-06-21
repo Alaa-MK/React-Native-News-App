@@ -1,13 +1,15 @@
 import * as React from 'react';
-import {StyleSheet, Text, View, ActivityIndicator, ScrollView} from 'react-native';
+import {StyleSheet, Text, View, ActivityIndicator, ScrollView, TouchableOpacity} from 'react-native';
 import {getNewsSources} from '../utils/WebServices'
 
 function NewsSourceItem(props){
     return (
-        <View style={styles.newsSourceContainer}>
+        <TouchableOpacity 
+        style={styles.newsSourceContainer}
+            onPress={() => props.navigation.navigate('SourceHeadlines', { countries: ['ALL'], categories: ['ALL'], sources: [props.id]})}>
             <Text style={styles.sourceName}>{props.name}</Text>
             <Text style={styles.sourceDescription}>{props.description}</Text>
-        </View>
+        </TouchableOpacity>
     )
 }
 
@@ -27,7 +29,7 @@ export default class NewsSources extends React.Component {
             .catch(err => console.log(err));
     }
 
-    render() {
+    render() {        
         const sources = this.state.sources.map(source => <NewsSourceItem navigation={this.props.navigation} {...source} />)
         return (
             this.state.isLoading ?
