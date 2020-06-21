@@ -1,4 +1,4 @@
-const KEY = '51de623df8c5440bbf5c4bca8196accf';
+const KEY = '1e9aea2285884d7daaa71324d362654a';
 
 export async function getArticles (countries, categories, sources, highlightsOnly = false){
     
@@ -32,7 +32,7 @@ export async function getArticles (countries, categories, sources, highlightsOnl
 }
 
 export async function getNewsSources(){
-    var url = "https://newsapi.org/v2/sources?apiKey=51de623df8c5440bbf5c4bca8196accf"
+    var url = `https://newsapi.org/v2/sources?apiKey=${KEY}`
     var req = new Request(url);
     return (
         fetch(req)

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, Dimensions, Linking } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import {addArticleToHistory} from './History'
 const {width, height} = Dimensions.get ('window');
 
 export function fixAuthor (originalAuthor) {
@@ -13,27 +14,39 @@ export function fixAuthor (originalAuthor) {
   return originalAuthor == null ? 'غير معروف' : originalAuthor;
 }
 
-export default function HeadlineDetails (props){
-    var params = props.route.params;
+export default class HeadlineDetails extends React.Component{
     
+  constructor(){
+    super();
+  }
+  componentDidMount(){
+    var params = this.props.route.params;
+    var author = fixAuthor(params.author);
+    
+    addArticleToHistory(params.title, author, params.source, params.date);
+  }
+  render(){
+    var params = this.props.route.params;
+
     var author = fixAuthor(params.author);
     return (
-        <ScrollView 
+      <ScrollView
         style={styles.headline}>
-            <Image style={styles.headlineImage} source={{ uri: params.urlToImage }} />
-            <View style={{ padding: 15 }}>
-                <Text style={styles.headlineTitle}>{params.title}</Text>
-                <Text>{author}</Text>
-                <Text>{new Date(params.publishedAt).toLocaleString('en-US')}</Text>
-                <Text style={styles.headlineContent}>{params.content}</Text>
-                <TouchableOpacity 
-                style={styles.button}
-                onPress={() => Linking.openURL(params.url)}>
-                    <Text style={styles.buttonText}>Open URL</Text>
-                </TouchableOpacity>
-            </View>
-        </ScrollView>
-    );
+        <Image style={styles.headlineImage} source={{ uri: params.urlToImage }} />
+        <View style={{ padding: 15 }}>
+          <Text style={styles.headlineTitle}>{params.title}</Text>
+          <Text>{author}</Text>
+          <Text>{new Date(params.publishedAt).toLocaleString('en-US')}</Text>
+          <Text style={styles.headlineContent}>{params.content}</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => Linking.openURL(params.url)}>
+            <Text style={styles.buttonText}>Open URL</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    ); 
+  }
 }
 
 export const styles = StyleSheet.create ({
