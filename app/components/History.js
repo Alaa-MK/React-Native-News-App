@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import {load, store} from '../utils/StorageUtils'
-import {styles} from './HeadlineDetails'
+import {styles, fixAuthor} from './HeadlineDetails'
 
 export async function addArticleToHistory(title, author, source, dateTime) {
     var history = await load('history');
@@ -9,7 +9,7 @@ export async function addArticleToHistory(title, author, source, dateTime) {
         history = {}
     history[title + '__' + author] = {  // I assume the title and author together is a unique key
         title,
-        author,
+        author: fixAuthor(author),
         source,
         timestamp: Date.now()
     };    
@@ -22,7 +22,7 @@ function HistoryItem(props){
         <View style={[styles.headline, {padding: 15}]}>
             <Text style={styles.headlineTitle}>{props.title}</Text>
             <Text>{props.author}</Text>
-            <Text>{new Date(props.publishedAt).toLocaleString('en-US')}</Text>
+            <Text>{'Viewed at: ' + new Date(props.timestamp).toLocaleString('en-US')}</Text>
         </View>
     )
 }
