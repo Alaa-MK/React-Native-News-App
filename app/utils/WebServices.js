@@ -2,29 +2,28 @@ const KEY = '51de623df8c5440bbf5c4bca8196accf';
 
 export async function getArticles (countries, categories, sources, highlightsOnly = false){
     
-    const pageSize = 10;    //per request. So the total #posts returned is (size(countries)*size(categories)*pageSize)
+    const pageSize = 10;    //per request. So the total #posts returned is (size(countries)*size(categories)*size(sources)*pageSize)
     var promises = [];
+    console.warn(sources);
     
     countries.forEach(country =>{
         categories.forEach(category => {
-            sources.forEach(source => {
-                var url = 'https://newsapi.org/v2/'
-                    + (highlightsOnly ? 'top-headlines?' : 'everything?')
-                    + (country == 'ALL' ? '' : `country=${country}&`)
-                    + (category == 'ALL' ? '' : `category=${category}&`)
-                    + (source == 'ALL' ? '' : `sources=${source}&`)
-                    + `pageSize=${pageSize}&`
-                    + `apiKey=${KEY}`;
-                console.log(url);
-                
-                var req = new Request(url);
-                promises.push(
-                    fetch(req)
-                        .then(res => res.json())
-                        .then(res => res.articles)
-                        .catch(err => console.log(err))
-                );
-            });
+            var url = 'https://newsapi.org/v2/'
+                + (highlightsOnly ? 'top-headlines?' : 'everything?')
+                + (country == 'ALL' ? '' : `country=${country}&`)
+                + (category == 'ALL' ? '' : `category=${category}&`)
+                + (sources == 'ALL' ? '' : `sources=${sources.join()}&`)
+                + `pageSize=${pageSize}&`
+                + `apiKey=${KEY}`;
+            console.log(url);
+
+            var req = new Request(url);
+            promises.push(
+                fetch(req)
+                    .then(res => res.json())
+                    .then(res => res.articles)
+                    .catch(err => console.log(err))
+            );
         });
     });
 

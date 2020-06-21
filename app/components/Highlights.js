@@ -6,7 +6,7 @@ export default function Highlights(props) {
         <HeadlinesList
             countries={['EG', 'AE']}
             categories={['business', 'sports']}
-            sources={['ALL']}
+            sources='ALL'
             highlightsOnly={true}
             navigation={props.navigation} />
     )
