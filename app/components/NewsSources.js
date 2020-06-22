@@ -26,7 +26,7 @@ export default class NewsSources extends React.Component {
             .then(sources => {
                 this.setState({ isLoading: false, sources: sources })
             })
-            .catch(err => console.log("NEWSOURCESERROR: ",err));
+            .catch(err => console.log(err));
     }
 
     render() {        

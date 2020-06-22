@@ -4,7 +4,6 @@ export async function getArticles (countries, categories, sources, highlightsOnl
     
     const pageSize = 10;    //per request. So the total #posts returned is (size(countries)*size(categories)*size(sources)*pageSize)
     var promises = [];
-    console.warn(sources);
     
     countries.forEach(country =>{
         categories.forEach(category => {
@@ -15,7 +14,6 @@ export async function getArticles (countries, categories, sources, highlightsOnl
                 + (sources == 'ALL' ? '' : `sources=${sources.join()}&`)
                 + `pageSize=${pageSize}&`
                 + `apiKey=${KEY}`;
-            console.log(url);
 
             var req = new Request(url);
             promises.push(
