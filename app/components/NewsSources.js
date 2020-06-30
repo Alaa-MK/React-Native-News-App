@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {StyleSheet, Text, View, ActivityIndicator, ScrollView, TouchableOpacity} from 'react-native';
 import {getNewsSources} from '../utils/WebServices'
+import { inject, observer } from 'mobx-react';
 
 function NewsSourceItem(props){
     return (
@@ -13,26 +14,25 @@ function NewsSourceItem(props){
     )
 }
 
+@inject('store')
+@observer
 export default class NewsSources extends React.Component {
     constructor(){
         super();
-        this.state = {
-            isLoading: true,
-            sources: []
-        }
     }
     componentDidMount() {
         getNewsSources()
             .then(sources => {
-                this.setState({ isLoading: false, sources: sources })
+                this.props.store.setSourcesStillLoading(false);
+                this.props.store.setSources(sources);    
             })
             .catch(err => console.log(err));
     }
 
     render() {        
-        const sources = this.state.sources.map(source => <NewsSourceItem navigation={this.props.navigation} {...source} />)
+        const sources = this.props.store.sources.map(source => <NewsSourceItem navigation={this.props.navigation} {...source} />)
         return (
-            this.state.isLoading ?
+            this.props.store.sourcesStillLoading ?
                 <View style={{ justifyContent: 'center', height: '100%' }}>
                     <ActivityIndicator size="large" />
                 </View>

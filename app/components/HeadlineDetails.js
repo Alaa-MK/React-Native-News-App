@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, Dimensions, Linking } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import {addArticleToHistory} from './History'
+import {addArticleToLocalHistory} from './History'
 const {width, height} = Dimensions.get ('window');
 
 export function fixAuthor (originalAuthor) {
@@ -23,7 +23,7 @@ export default class HeadlineDetails extends React.Component{
     var params = this.props.route.params;
     var author = fixAuthor(params.author);
     
-    addArticleToHistory(params.title, author, params.source, params.date);
+    addArticleToLocalHistory(params.title, author, params.source, params.date);
   }
   render(){
     var params = this.props.route.params;

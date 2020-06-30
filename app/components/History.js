@@ -2,8 +2,9 @@ import * as React from 'react';
 import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import {load, store} from '../utils/StorageUtils'
 import {styles, fixAuthor} from './HeadlineDetails'
+import { inject, observer } from 'mobx-react';
 
-export async function addArticleToHistory(title, author, source, dateTime) {
+export async function addArticleToLocalHistory(title, author, source, dateTime) {
     var history = await load('history');
     if (history == null)
         history = {}
@@ -27,31 +28,30 @@ function HistoryItem(props){
     )
 }
 
+@inject('store')
+@observer
 export default class History extends React.Component {
     constructor(){
         super();
-        this.state = {
-            history: {}
-        }
         this.onScreenFocus = this.onScreenFocus.bind(this);
     }
 
     componentDidMount(){
         this.props.navigation.addListener('focus', this.onScreenFocus)
         load('history')
-            .then(history => this.setState({ history: history }))
+            .then(history => this.props.store.setHistory(history))
     }
 
     onScreenFocus(){
         load('history')
-        .then(history => this.setState({history: history}))
+            .then(history => this.props.store.setHistory(history))
     }
 
     render () {
         let historyItems = []
         
-        if (this.state.history != null) {
-            historyItems = Object.values(this.state.history)
+        if (this.props.store.history != null) {
+            historyItems = Object.values(this.props.store.history)
             .sort((a,b) => a.timestamp < b.timestamp)
             .map(value => <HistoryItem {...value}/>)
         }
